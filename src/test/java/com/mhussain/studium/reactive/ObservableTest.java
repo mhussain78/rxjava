@@ -16,8 +16,7 @@ public class ObservableTest {
 
     @Test
     public void testCreate() {
-        var observale = Observable.create((
-                        Observable.OnSubscribe<String>) sub -> {
+        var observale = Observable.create(sub -> {
                     sub.onNext("Hello, reactive world!");
                     sub.onCompleted();
                 }
