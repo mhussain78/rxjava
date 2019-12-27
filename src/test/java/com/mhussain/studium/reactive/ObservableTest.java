@@ -2,7 +2,6 @@ package com.mhussain.studium.reactive;
 
 import org.junit.jupiter.api.Test;
 import rx.Observable;
-import rx.functions.Action1;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
@@ -46,12 +45,9 @@ public class ObservableTest {
     @Test
     public void testUnsubscribe() throws InterruptedException {
         CountDownLatch externalSignal = new CountDownLatch(7);
-        var subscription = interval(100, MILLISECONDS).subscribe(new Action1<Long>() {
-            @Override
-            public void call(Long aLong) {
-                System.out.println(aLong);
-                externalSignal.countDown();
-            }
+        var subscription = interval(100, MILLISECONDS).subscribe(aLong -> {
+            System.out.println(aLong);
+            externalSignal.countDown();
         });
 
         externalSignal.await();
