@@ -1,9 +1,11 @@
 package com.mhussain.studium.reactive;
 
 import org.junit.jupiter.api.Test;
+import rx.Observable;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static rx.Observable.*;
+import static rx.Observable.interval;
+import static rx.Observable.just;
 
 public class OperatorTest {
 
@@ -31,9 +33,8 @@ public class OperatorTest {
 
     @Test
     public void testZip() {
-        zip(
-                just("A", "B", "C"),
-                just("1", "2", "3"),
+        Observable.zip(Observable.just("A", "B", "C"),
+                Observable.just("1", "2", "3"),
                 (x, y) -> x + y)
                 .forEach(System.out::println);
     }

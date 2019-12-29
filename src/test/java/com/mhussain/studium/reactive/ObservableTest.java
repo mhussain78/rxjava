@@ -8,8 +8,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.Arrays.asList;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static rx.Observable.*;
+import static rx.Observable.from;
+import static rx.Observable.just;
 
 public class ObservableTest {
 
@@ -25,7 +25,7 @@ public class ObservableTest {
 
     @Test
     public void testJust() {
-        var observable = just("1", "2", "3", "4");
+        var observable = Observable.just("1", "2", "3", "4");
         observable.subscribe(System.out::println, System.err::println, () -> System.out.println("Done!"));
     }
 
@@ -38,14 +38,19 @@ public class ObservableTest {
 
     @Test
     public void testInterval() throws InterruptedException {
-        interval(1, TimeUnit.SECONDS).subscribe(e -> System.out.println("Received: " + e));
+        var observable = Observable.interval(1, TimeUnit.SECONDS);
+        observable.subscribe(e -> System.out.println("Subscriber-1: " + e));
+
+        Thread.sleep(3000);
+
+        observable.subscribe(e -> System.out.println("Subscriber-2: " + e));
         Thread.sleep(5000);
     }
 
     @Test
     public void testUnsubscribe() throws InterruptedException {
         CountDownLatch externalSignal = new CountDownLatch(7);
-        var subscription = interval(100, MILLISECONDS).subscribe(aLong -> {
+        var subscription = Observable.interval(100, TimeUnit.MILLISECONDS).subscribe(aLong -> {
             System.out.println(aLong);
             externalSignal.countDown();
         });
